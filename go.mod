@@ -1,9 +1,14 @@
-module github.com/gonomalo
+module github.com/square/anomalo-go
 
 go 1.19
 
 require (
-	github.com/squareup/beyondclient-go v0.0.0-20220216210023-8de8d148178a // indirect
-	github.com/vmihailenco/msgpack/v5 v5.3.4 // indirect
-	github.com/vmihailenco/tagparser/v2 v2.0.0 // indirect
+	github.com/stretchr/testify v1.6.1
+	golang.org/x/exp v0.0.0-20230425010034-47ecfdc1ba53
+)
+
+require (
+	github.com/davecgh/go-spew v1.1.0 // indirect
+	github.com/pmezard/go-difflib v1.0.0 // indirect
+	gopkg.in/yaml.v3 v3.0.0-20200313102051-9f266ea9e77c // indirect
 )
