@@ -1,8 +1,9 @@
 # Anomalo-Go
-
 A Go client for Anomalo.
 
-This package exists primarily to support the Terraform provider, [TFAnomalo](https://github.com/square/terraform-provider-anomalo). Consequently, it implements only a subset of the Anomalo API.
+This package exists primarily to support the [Terraform provider](https://github.com/square/terraform-provider-anomalo). Consequently, it implements only a subset of the Anomalo API.
+
+[![Go Reference](https://pkg.go.dev/badge/github.com/square/anomalo-go/anomalo.svg)](https://pkg.go.dev/github.com/square/anomalo-go/anomalo)
 
 ## Table of Contents
 
