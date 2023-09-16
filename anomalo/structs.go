@@ -17,7 +17,7 @@ type GetTableResponse struct {
 		Description string `json:"description,omitempty"`
 		ID          int    `json:"id,omitempty"`
 	} `json:"notification_channel,omitempty"`
-	RecentStatus struct {
+	RecentStatus struct { // TODO is this different?
 		IntervalID           int       `json:"interval_id,omitempty"`
 		LatestRunChecksJobID string    `json:"latest_run_checks_job_id,omitempty"`
 		Status               string    `json:"status,omitempty"`
@@ -84,6 +84,7 @@ type ConfigureTableResponse struct {
 type Check struct {
 	CheckID       int    `json:"check_id,omitempty"`
 	CheckStaticID int    `json:"check_static_id,omitempty"`
+	Ref           string `json:"ref,omitempty"`
 	CheckType     string `json:"check_type,omitempty"`
 	Config        struct {
 		Metadata struct {
@@ -122,7 +123,9 @@ type CreateCheckRequest struct {
 }
 
 type CreateCheckResponse struct {
-	CheckID int `json:"check_id,omitempty"`
+	CheckID       int    `json:"check_id,omitempty"`
+	CheckRef      string `json:"check_ref,omitempty"`
+	CheckStaticId string `json:"check_static_id,omitempty"`
 }
 
 type DeleteCheckRequest struct {
