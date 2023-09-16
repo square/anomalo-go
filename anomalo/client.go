@@ -96,7 +96,7 @@ func (c *Client) apiCallWithBody(endpoint string, method string, jsonParams stri
 		req.URL.RawQuery = params.Encode()
 	}
 
-	req.Header.Set("X-Anomalo-Token", c.Token)
+	req.Header.Set("Authorization", "Bearer "+c.Token)
 	req.Header.Set("Content-Type", "application/json")
 
 	resp, err := c.getClient().Do(req)
