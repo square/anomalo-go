@@ -17,13 +17,15 @@ type GetTableResponse struct {
 		Description string `json:"description,omitempty"`
 		ID          int    `json:"id,omitempty"`
 	} `json:"notification_channel,omitempty"`
-	RecentStatus struct { // TODO is this different?
-		IntervalID           int       `json:"interval_id,omitempty"`
-		LatestRunChecksJobID string    `json:"latest_run_checks_job_id,omitempty"`
-		Status               string    `json:"status,omitempty"`
-		StatusDisplay        string    `json:"status_display,omitempty"`
-		TimePeriodEnd        time.Time `json:"time_period_end,omitempty"`
-		TimePeriodStart      time.Time `json:"time_period_start,omitempty"`
+	RecentStatus struct {
+		RecentIntervals []struct {
+			IntervalID           int       `json:"interval_id,omitempty"`
+			LatestRunChecksJobID string    `json:"latest_run_checks_job_id,omitempty"`
+			Status               string    `json:"status,omitempty"`
+			StatusDisplay        string    `json:"status_display,omitempty"`
+			TimePeriodEnd        time.Time `json:"time_period_end,omitempty"`
+			TimePeriodStart      time.Time `json:"time_period_start,omitempty"`
+		} `json:"recent_intervals,omitempty"`
 	} `json:"recent_status,omitempty"`
 	Warehouse struct {
 		ID   int    `json:"id,omitempty"`
