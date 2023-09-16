@@ -18,12 +18,14 @@ type GetTableResponse struct {
 		ID          int    `json:"id,omitempty"`
 	} `json:"notification_channel,omitempty"`
 	RecentStatus struct {
-		IntervalID           int       `json:"interval_id,omitempty"`
-		LatestRunChecksJobID string    `json:"latest_run_checks_job_id,omitempty"`
-		Status               string    `json:"status,omitempty"`
-		StatusDisplay        string    `json:"status_display,omitempty"`
-		TimePeriodEnd        time.Time `json:"time_period_end,omitempty"`
-		TimePeriodStart      time.Time `json:"time_period_start,omitempty"`
+		RecentIntervals []struct {
+			IntervalID           int       `json:"interval_id,omitempty"`
+			LatestRunChecksJobID string    `json:"latest_run_checks_job_id,omitempty"`
+			Status               string    `json:"status,omitempty"`
+			StatusDisplay        string    `json:"status_display,omitempty"`
+			TimePeriodEnd        time.Time `json:"time_period_end,omitempty"`
+			TimePeriodStart      time.Time `json:"time_period_start,omitempty"`
+		} `json:"recent_intervals,omitempty"`
 	} `json:"recent_status,omitempty"`
 	Warehouse struct {
 		ID   int    `json:"id,omitempty"`
@@ -84,6 +86,7 @@ type ConfigureTableResponse struct {
 type Check struct {
 	CheckID       int    `json:"check_id,omitempty"`
 	CheckStaticID int    `json:"check_static_id,omitempty"`
+	Ref           string `json:"ref,omitempty"`
 	CheckType     string `json:"check_type,omitempty"`
 	Config        struct {
 		Metadata struct {
@@ -122,7 +125,9 @@ type CreateCheckRequest struct {
 }
 
 type CreateCheckResponse struct {
-	CheckID int `json:"check_id,omitempty"`
+	CheckID       int    `json:"check_id,omitempty"`
+	CheckRef      string `json:"check_ref,omitempty"`
+	CheckStaticId string `json:"check_static_id,omitempty"`
 }
 
 type DeleteCheckRequest struct {
