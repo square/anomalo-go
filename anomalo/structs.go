@@ -126,7 +126,7 @@ type CreateCheckRequest struct {
 
 type CreateCheckResponse struct {
 	CheckID       int    `json:"check_id,omitempty"`
-	CheckRef      string `json:"check_ref,omitempty"`
+	CheckRef      string `json:"ref,omitempty"`
 	CheckStaticId int    `json:"check_static_id,omitempty"`
 }
 
