@@ -205,6 +205,34 @@ func (c *Client) GetCheckByStaticID(tableID int, staticID int) (*Check, error) {
 	return relevantCheck, nil
 }
 
+// GetCheckByRef Wrapper around GetChecks that additionally filters checks
+// by Ref. Returns nil if a matching check is not found.
+//
+// Note that this method does a linear search through all checks, since the
+// Anomalo API does not allow queries by check static ID. This shouldn't be
+// untenable since it's unlikely to have so many checks on a table that this
+// iteration becomes slow.
+func (c *Client) GetCheckByRef(tableID int, ref string) (*Check, error) {
+	data, err := c.GetChecks(tableID)
+	if err != nil {
+		return nil, err
+	}
+
+	var relevantCheck *Check
+	for _, check := range data.Checks {
+		if check.Ref == ref {
+			if relevantCheck != nil {
+				return nil, fmt.Errorf("saw more than one check with the same ref %s for table %d. "+
+					"check IDs %d & %d", ref, tableID, relevantCheck.CheckID, check.CheckID)
+			}
+			temp := check // Necessary because the address of `check` stays the same
+			relevantCheck = &temp
+		}
+	}
+
+	return relevantCheck, nil
+}
+
 func (c *Client) CreateCheck(req CreateCheckRequest) (*CreateCheckResponse, error) {
 	var data *CreateCheckResponse
 	reqJson, err := json.Marshal(req)
