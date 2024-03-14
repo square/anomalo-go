@@ -159,3 +159,7 @@ type Organization struct {
 type GetOrganizationsResponse struct {
 	Organizations []Organization `json:"organizations,omitempty"`
 }
+
+type ChangeOrganizationResponse struct {
+	ID int `json:"id,omitempty"`
+}
