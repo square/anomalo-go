@@ -24,11 +24,13 @@ type HttpClientProvider func() *http.Client
 var (
 	// ValidNotificationChannels A set of supported notification channel types
 	ValidNotificationChannels = map[string]struct{}{
-		"slack":     {},
-		"pagerduty": {},
-		"msteams":   {},
 		"email":     {},
 		"email_all": {},
+		"msteams":   {},
+		"opsgenie":  {},
+		"pagerduty": {},
+		"slack":     {},
+		"webhook":   {},
 	}
 )
 
