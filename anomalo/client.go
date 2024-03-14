@@ -325,7 +325,7 @@ func (c *Client) GetNotificationChannelWithDescriptionContaining(
 
 func (c *Client) GetOrganizations() ([]*Organization, error) {
 	var data []*Organization
-	resp, err := c.apiCall("list_organizations", http.MethodGet)
+	resp, err := c.apiCall("organizations", http.MethodGet)
 	if err != nil {
 		return nil, err
 	}
@@ -354,6 +354,22 @@ func (c *Client) GetOrganizationByName(name string) (*Organization, error) {
 
 	return nil, fmt.Errorf("did not find an organization with name %s. Make sure it exists, and this API "+
 		"token has access. Found names: %s", name, strings.Join(names, ", "))
+}
+
+// ChangeOrganization TODO a
+func (c *Client) ChangeOrganization(orgId int64) (*ChangeOrganizationResponse, error) {
+	var data *ChangeOrganizationResponse
+	req := fmt.Sprintf("{\"id\": \"%d\"}", orgId)
+	resp, err := c.apiCallWithBody("organization", http.MethodPut, req)
+	if err != nil {
+		return nil, err
+	}
+	body := resp.Body
+	defer closeBody(body)
+	if err := json.NewDecoder(body).Decode(&data); err != nil {
+		return nil, err
+	}
+	return data, nil
 }
 
 // For debugging
