@@ -148,3 +148,14 @@ type NotificationChannel struct {
 type GetNotificationChannelsResponse struct {
 	NotificationChannels []NotificationChannel `json:"notification_channels,omitempty"`
 }
+
+// TODO not actually an API object
+type Organization struct {
+	ID   int    `json:"id,omitempty"`
+	Name string `json:"name,omitempty"`
+}
+
+// TODO not actually an API object
+type GetOrganizationsResponse struct {
+	Organizations []Organization `json:"organizations,omitempty"`
+}

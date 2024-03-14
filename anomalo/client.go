@@ -323,6 +323,39 @@ func (c *Client) GetNotificationChannelWithDescriptionContaining(
 	return matchingChannel, nil
 }
 
+func (c *Client) GetOrganizations() ([]*Organization, error) {
+	var data []*Organization
+	resp, err := c.apiCall("list_organizations", http.MethodGet)
+	if err != nil {
+		return nil, err
+	}
+	body := resp.Body
+	defer closeBody(body)
+	if err := json.NewDecoder(body).Decode(&data); err != nil {
+		return nil, err
+	}
+	return data, nil
+}
+
+// GetOrganizationByName TODO a
+func (c *Client) GetOrganizationByName(name string) (*Organization, error) {
+	orgs, err := c.GetOrganizations()
+	if err != nil {
+		return nil, err
+	}
+
+	names := make([]string, len(orgs))
+	for i, org := range orgs {
+		names[i] = org.Name
+		if org.Name == name {
+			return org, nil
+		}
+	}
+
+	return nil, fmt.Errorf("did not find an organization with name %s. Make sure it exists, and this API "+
+		"token has access. Found names: %s", name, strings.Join(names, ", "))
+}
+
 // For debugging
 func responseToString(resp *http.Response) string {
 	bodyBytes, err := io.ReadAll(resp.Body)
