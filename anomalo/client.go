@@ -323,6 +323,63 @@ func (c *Client) GetNotificationChannelWithDescriptionContaining(
 	return matchingChannel, nil
 }
 
+func (c *Client) GetOrganizations() ([]*Organization, error) {
+	var data []*Organization
+	resp, err := c.apiCall("organizations", http.MethodGet)
+	if err != nil {
+		return nil, err
+	}
+	body := resp.Body
+	defer closeBody(body)
+	if err := json.NewDecoder(body).Decode(&data); err != nil {
+		return nil, err
+	}
+	return data, nil
+}
+
+// GetOrganizationByName Wrapper around GetOrganizations that looks for an
+// organization by name.
+//
+// Returns nil if a channel with a case-sensitive exact match is not found.
+//
+// Also note that this method does a linear search through all notification
+// channels due to limitations with the Anomalo API. This is unlikely to be an
+// issue since we don't expect large numbers of notification channels.
+func (c *Client) GetOrganizationByName(name string) (*Organization, error) {
+	orgs, err := c.GetOrganizations()
+	if err != nil {
+		return nil, err
+	}
+
+	names := make([]string, len(orgs))
+	for i, org := range orgs {
+		names[i] = org.Name
+		if org.Name == name {
+			return org, nil
+		}
+	}
+
+	return nil, fmt.Errorf("did not find an organization with name %s. Make sure it exists, and this API "+
+		"token has access. Found names: %s", name, strings.Join(names, ", "))
+}
+
+// ChangeOrganization API keys have permissions scoped to a given Organization. An API key can only act within the scope
+// of one organization at a time. Call ChangeOrganization to change the Organization the API Key is acting within.
+func (c *Client) ChangeOrganization(orgId int64) (*ChangeOrganizationResponse, error) {
+	var data *ChangeOrganizationResponse
+	req := fmt.Sprintf("{\"id\": \"%d\"}", orgId)
+	resp, err := c.apiCallWithBody("organization", http.MethodPut, req)
+	if err != nil {
+		return nil, err
+	}
+	body := resp.Body
+	defer closeBody(body)
+	if err := json.NewDecoder(body).Decode(&data); err != nil {
+		return nil, err
+	}
+	return data, nil
+}
+
 // For debugging
 func responseToString(resp *http.Response) string {
 	bodyBytes, err := io.ReadAll(resp.Body)

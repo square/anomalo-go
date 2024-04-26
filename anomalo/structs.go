@@ -148,3 +148,16 @@ type NotificationChannel struct {
 type GetNotificationChannelsResponse struct {
 	NotificationChannels []NotificationChannel `json:"notification_channels,omitempty"`
 }
+
+type Organization struct {
+	ID   int    `json:"id,omitempty"`
+	Name string `json:"name,omitempty"`
+}
+
+type GetOrganizationsResponse struct {
+	Organizations []Organization `json:"organizations,omitempty"`
+}
+
+type ChangeOrganizationResponse struct {
+	ID int `json:"id,omitempty"`
+}
