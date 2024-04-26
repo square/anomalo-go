@@ -337,7 +337,14 @@ func (c *Client) GetOrganizations() ([]*Organization, error) {
 	return data, nil
 }
 
-// GetOrganizationByName TODO a
+// GetOrganizationByName Wrapper around GetOrganizations that looks for an
+// organization by name.
+//
+// Returns nil if a channel with a case-sensitive exact match is not found.
+//
+// Also note that this method does a linear search through all notification
+// channels due to limitations with the Anomalo API. This is unlikely to be an
+// issue since we don't expect large numbers of notification channels.
 func (c *Client) GetOrganizationByName(name string) (*Organization, error) {
 	orgs, err := c.GetOrganizations()
 	if err != nil {
@@ -356,7 +363,8 @@ func (c *Client) GetOrganizationByName(name string) (*Organization, error) {
 		"token has access. Found names: %s", name, strings.Join(names, ", "))
 }
 
-// ChangeOrganization TODO a
+// ChangeOrganization API keys have permissions scoped to a given Organization. An API key can only act within the scope
+// of one organization at a time. Call ChangeOrganization to change the Organization the API Key is acting within.
 func (c *Client) ChangeOrganization(orgId int64) (*ChangeOrganizationResponse, error) {
 	var data *ChangeOrganizationResponse
 	req := fmt.Sprintf("{\"id\": \"%d\"}", orgId)
