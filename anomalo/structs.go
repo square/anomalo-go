@@ -15,10 +15,8 @@ type Label struct {
 }
 
 type ListTablesRequest struct {
-    LabelID             int  `json:"label_id,omitempty"`
     Limit               int  `json:"limit,omitempty"`
     Offset              int  `json:"offset,omitempty"`
-    WithoutAccessGroups bool `json:"without_access_groups,omitempty"`
 }
 
 type ListTablesResponse struct {
@@ -207,18 +205,18 @@ type RunChecksResponse struct {
             Name string `json:"name,omitempty"`
         }
         Results        struct {
-            Errored              bool   `json:"errored,omitempty"`
-            EvaluatedMessage     string `json:"evaluated_message,omitempty"`
-            ExceptionMsg         string `json:"exception_msg,omitempty"`
-            ExceptionTraceback   string `json:"exception_traceback,omitempty"`
-            HistoryMessage       string `json:"history_message,omitempty"`
-            SampleRowsBadCsvUrl  string `json:"sample_rows_bad_csv_url,omitempty"`
-            SampleRowsBadSql     string `json:"sample_rows_bad_sql,omitempty"`
-            SampleRowsGoodCsvUrl string `json:"sample_rows_good_csv_url,omitempty"`
-            SampleRowsGoodSql    string `json:"sample_rows_good_sql,omitempty"`
-            Statistic            float  `json:"statistic,omitempty"`
-            StatisticName        string `json:"statistic_name,omitempty"`
-            Success              bool   `json:"success,omitempty"`
+            Errored              bool     `json:"errored,omitempty"`
+            EvaluatedMessage     string   `json:"evaluated_message,omitempty"`
+            ExceptionMsg         string   `json:"exception_msg,omitempty"`
+            ExceptionTraceback   string   `json:"exception_traceback,omitempty"`
+            HistoryMessage       string   `json:"history_message,omitempty"`
+            SampleRowsBadCsvUrl  string   `json:"sample_rows_bad_csv_url,omitempty"`
+            SampleRowsBadSql     string   `json:"sample_rows_bad_sql,omitempty"`
+            SampleRowsGoodCsvUrl string   `json:"sample_rows_good_csv_url,omitempty"`
+            SampleRowsGoodSql    string   `json:"sample_rows_good_sql,omitempty"`
+            Statistic            float32  `json:"statistic,omitempty"`
+            StatisticName        string   `json:"statistic_name,omitempty"`
+            Success              bool     `json:"success,omitempty"`
         }
         ResultsPending bool
         RunConfig      struct {
