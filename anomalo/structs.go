@@ -14,12 +14,6 @@ type Label struct {
 	Scope string `json:"scope,omitempty"`
 }
 
-type GetTableInformationRequest struct {
-	TableID     int    `json:"table_id,omitempty"`
-	WarehouseID string `json:"warehouse_id,omitempty"`
-	TableName   string `json:"table_name,omitempty"`
-}
-
 type GetTableResponse struct {
 	Description         string `json:"description,omitempty"`
 	FullName            string `json:"full_name,omitempty"`

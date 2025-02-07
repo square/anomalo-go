@@ -131,13 +131,10 @@ func (c *Client) Ping() (*PingResponse, error) {
 	return data, nil
 }
 
-func (c *Client) GetTableInformation(req GetTableInformationRequest) (*GetTableResponse, error) {
+func (c *Client) GetTableInformation(tableName string) (*GetTableResponse, error) {
 	var data *GetTableResponse
-	reqJson, err := json.Marshal(req)
-	if err != nil {
-		return nil, err
-	}
-	resp, err := c.apiCallWithBody("get_table_information", http.MethodGet, string(reqJson))
+	req := fmt.Sprintf("{\"table_name\": \"%s\"}", tableName)
+	resp, err := c.apiCallWithBody("get_table_information", http.MethodGet, req)
 	if err != nil {
 		return nil, err
 	}
