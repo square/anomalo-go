@@ -8,13 +8,11 @@ package anomalo
 import (
 	"bytes"
 	"encoding/json"
-    "errors"
 	"fmt"
 	"io"
 	"log"
 	"net/http"
 	"strings"
-    "strconv"
 
 	"golang.org/x/exp/maps"
 )
@@ -133,41 +131,13 @@ func (c *Client) Ping() (*PingResponse, error) {
 	return data, nil
 }
 
-func (c *Client) ListTables(req ListTablesRequest) (*ListTablesResponse, error) {
-    var data []*Table
-    reqJson, err := json.Marshal(req)
+func (c *Client) GetTableInformation(req GetTableInformationRequest) (*GetTableResponse, error) {
+	var data *GetTableResponse
+	reqJson, err := json.Marshal(req)
 	if err != nil {
 		return nil, err
 	}
-	resp, err := c.apiCallWithBody("tables", http.MethodGet, string(reqJson))
-    if err != nil {
-		return nil, err
-	}
-	body := resp.Body
-	defer closeBody(body)
-	if err := json.NewDecoder(body).Decode(&data); err != nil {
-		return nil, err
-	}
-
-    // Parse the number of total items from the Content-Range header
-    // This string is in the format of i-j/n where the response contains
-    // items i through j, with n total items across all pages
-    contentRange := resp.Header.Get("Content-Range")
-    tokens := strings.Split(contentRange, "/")
-    if len(tokens) != 2 {
-        return nil, errors.New("unable to parse total number of tables")
-    }
-    total, err := strconv.Atoi(tokens[1])
-    if err != nil {
-        return nil, errors.New("unable to parse total number of tables")
-    }
-    return &ListTablesResponse{Tables: data, Total: total}, nil
-}
-
-func (c *Client) GetTableInformation(tableName string) (*GetTableResponse, error) {
-	var data *GetTableResponse
-	req := fmt.Sprintf("{\"table_name\": \"%s\"}", tableName)
-	resp, err := c.apiCallWithBody("get_table_information", http.MethodGet, req)
+	resp, err := c.apiCallWithBody("get_table_information", http.MethodGet, string(reqJson))
 	if err != nil {
 		return nil, err
 	}
@@ -305,21 +275,21 @@ func (c *Client) DeleteCheck(req DeleteCheckRequest) (*DeleteCheckResponse, erro
 }
 
 func (c *Client) RunChecks(req RunChecksRequest) (*RunChecksResponse, error) {
-    var data *RunChecksResponse
-	reqJson, err := json.Marshal(req)
-	if err != nil {
-		return nil, err
-	}
-	resp, err := c.apiCallWithBody("run_checks", http.MethodPost, string(reqJson))
-	if err != nil {
-		return nil, err
-	}
-	body := resp.Body
-	defer closeBody(body)
-	if err := json.NewDecoder(body).Decode(&data); err != nil {
-		return nil, err
-	}
-	return data, nil
+        var data *RunChecksResponse
+        reqJson, err := json.Marshal(req)
+        if err != nil {
+                return nil, err
+        }
+        resp, err := c.apiCallWithBody("run_checks", http.MethodPost, string(reqJson))
+        if err != nil {
+                return nil, err
+        }
+        body := resp.Body
+        defer closeBody(body)
+        if err := json.NewDecoder(body).Decode(&data); err != nil {
+                return nil, err
+        }
+        return data, nil
 }
 
 func (c *Client) GetNotificationChannels() (*GetNotificationChannelsResponse, error) {

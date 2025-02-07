@@ -8,31 +8,16 @@ type PingResponse struct {
 }
 
 type Label struct {
-    ID    int    `json:"id,omitempty"`
-    Name  string `json:"name,omitempty"`
-    Slug  string `json:"slug,omitempty"`
-    Scope string `json:"scope,omitempty"`
+	ID    int    `json:"id,omitempty"`
+	Name  string `json:"name,omitempty"`
+	Slug  string `json:"slug,omitempty"`
+	Scope string `json:"scope,omitempty"`
 }
 
-type ListTablesRequest struct {
-    Limit               int  `json:"limit,omitempty"`
-    Offset              int  `json:"offset,omitempty"`
-}
-
-type ListTablesResponse struct {
-    Tables []*Table `json:"tables,omitempty"`
-    Total  int      `json:"total,omi"`
-}
-
-type Table struct {
-    FullName  string   `json:"full_name,omitempty"`
-    ID        int      `json:"id,omitempty"`
-    Monitored bool     `json:"monitored,omitempty"`
-    Labels    []*Label `json:"labels,omitempty"`
-    Warehouse struct {
-        ID   int    `json:"id,omitempty"`
-        Name string `json:"name,omitempty"`
-    } `json:"warehouse,omitempty"`
+type GetTableInformationRequest struct {
+	TableID     int    `json:"table_id,omitempty"`
+	WarehouseID string `json:"warehouse_id,omitempty"`
+	TableName   string `json:"table_name,omitempty"`
 }
 
 type GetTableResponse struct {
@@ -168,73 +153,73 @@ type DeleteCheckResponse struct {
 }
 
 type RunChecksRequest struct {
-    TableID                  int      `json:"table_id,omitempty"`
-    IntervalID               int      `json:"interval_id,omitempty"`
-    CheckIDs                 []string `json:"check_ids,omitempty"`
-    Force                    bool     `json:"force,omitempty"`
-    ExecutionPriority        string   `json:"execution_priority,omitempty"`
-    RespectSkipError         bool     `json:"respect_skip_error,omitempty"`
-    RespectDataFreshnessGate bool     `json:"respect_data_freshness_date,omitempty"`
+	TableID                  int      `json:"table_id,omitempty"`
+	IntervalID               int      `json:"interval_id,omitempty"`
+	CheckIDs                 []string `json:"check_ids,omitempty"`
+	Force                    bool     `json:"force,omitempty"`
+	ExecutionPriority        string   `json:"execution_priority,omitempty"`
+	RespectSkipExpr          bool     `json:"respect_skip_expr,omitempty"`
+	RespectDataFreshnessGate bool     `json:"respect_data_freshness_gate,omitempty"`
 }
 
 type RunChecksResponse struct {
-    RunChecksJobId     string   `json:"run_checks_job_id,omitempty"`
-    RunChecksAllJobIds []string `json:"run_checks_all_job_ids,omitempty"`
-    TimeInterval       struct {
-        IntervalID                   int       `json:"interval_id,omitempty"`
-        LatestRunChecksJobId         string    `json:"latest_run_checks_job_id,omitempty"`
-        IntervalLatestCheckRunsToken string    `json:"interval_latest_check_runs_token,omitempty"`
-        Status                       string    `json:"status,omitempty"`
-        StatusDisplay                string    `json:"status_display,omitempty"`
-        TimePeriodEnd                time.Time `json:"time_period_end,omitempty"`
-        TimePeriodStart              time.Time `json:"time_period_start,omitempty"`
-    } `json:"time_interval,omitempty"`
-    CheckRuns          []struct {
-        CheckID        int
-        CheckRunID     int
-        CompletedAt    time.Time
-        Created        time.Time
-        CreatedBy      struct {
-            ID   int    `json:"id,omitempty"`
-            Name string `json:"name,omitempty"`
-        }
-        Labels         []*Label
-        LastEditedAt   time.Time
-        LastEditedBy   struct {
-            ID   int    `json:"id,omitempty"`
-            Name string `json:"name,omitempty"`
-        }
-        Results        struct {
-            Errored              bool     `json:"errored,omitempty"`
-            EvaluatedMessage     string   `json:"evaluated_message,omitempty"`
-            ExceptionMsg         string   `json:"exception_msg,omitempty"`
-            ExceptionTraceback   string   `json:"exception_traceback,omitempty"`
-            HistoryMessage       string   `json:"history_message,omitempty"`
-            SampleRowsBadCsvUrl  string   `json:"sample_rows_bad_csv_url,omitempty"`
-            SampleRowsBadSql     string   `json:"sample_rows_bad_sql,omitempty"`
-            SampleRowsGoodCsvUrl string   `json:"sample_rows_good_csv_url,omitempty"`
-            SampleRowsGoodSql    string   `json:"sample_rows_good_sql,omitempty"`
-            Statistic            float32  `json:"statistic,omitempty"`
-            StatisticName        string   `json:"statistic_name,omitempty"`
-            Success              bool     `json:"success,omitempty"`
-        }
-        ResultsPending bool
-        RunConfig      struct {
-            Metadata struct {
-                CheckMessage     string `json:"check_message,omitempty"`
-                CheckMessageHTML string `json:"check_message_html,omitempty"`
-                CheckType        string `json:"check_type,omitempty"`
-                Description      string `json:"description,omitempty"`
-                IsSystemCheck    bool   `json:"is_system_check,omitempty"`
-                PriorityLevel    string `json:"priority_level,omitempty"`
-          } `json:"_metadata,omitempty"`
-          Check   string                 `json:"check,omitempty"`
-          CheckID int                    `json:"check_id,omitempty"`
-          Params  map[string]interface{} `json:"params,omitempty"`
-        }
-        TriageStatus   *string
-        Status         string
-    } `json:"check_runs,omitempty"`
+	RunChecksJobId     string   `json:"run_checks_job_id,omitempty"`
+	RunChecksAllJobIds []string `json:"run_checks_all_job_ids,omitempty"`
+	TimeInterval       struct {
+		IntervalID                   int       `json:"interval_id,omitempty"`
+		LatestRunChecksJobId         string    `json:"latest_run_checks_job_id,omitempty"`
+		IntervalLatestCheckRunsToken string    `json:"interval_latest_check_runs_token,omitempty"`
+		Status                       string    `json:"status,omitempty"`
+		StatusDisplay                string    `json:"status_display,omitempty"`
+		TimePeriodEnd                time.Time `json:"time_period_end,omitempty"`
+		TimePeriodStart              time.Time `json:"time_period_start,omitempty"`
+	} `json:"time_interval,omitempty"`
+	CheckRuns          []struct {
+		CheckID        int       `json:"check_id,omitempty"`
+		CheckRunID     int       `json:"check_run_id,omitempty"`
+		CompletedAt    time.Time `json:"completed_at,omitempty"`
+		Created        time.Time `json:"created,omitempty"`
+		CreatedBy      struct {
+			ID   int    `json:"id,omitempty"`
+			Name string `json:"name,omitempty"`
+		}
+		Labels         []*Label  `json:"labels,omitempty"`
+		LastEditedAt   time.Time `json:"last_edited_at,omitempty"`
+		LastEditedBy   struct {
+			ID   int    `json:"id,omitempty"`
+			Name string `json:"name,omitempty"`
+		} `json:"last_edited_by,omitempty"`
+		Results        struct {
+			Errored              bool     `json:"errored,omitempty"`
+			EvaluatedMessage     string   `json:"evaluated_message,omitempty"`
+			ExceptionMsg         string   `json:"exception_msg,omitempty"`
+			ExceptionTraceback   string   `json:"exception_traceback,omitempty"`
+			HistoryMessage       string   `json:"history_message,omitempty"`
+			SampleRowsBadCsvUrl  string   `json:"sample_rows_bad_csv_url,omitempty"`
+			SampleRowsBadSql     string   `json:"sample_rows_bad_sql,omitempty"`
+			SampleRowsGoodCsvUrl string   `json:"sample_rows_good_csv_url,omitempty"`
+			SampleRowsGoodSql    string   `json:"sample_rows_good_sql,omitempty"`
+			Statistic            float32  `json:"statistic,omitempty"`
+			StatisticName        string   `json:"statistic_name,omitempty"`
+			Success              bool     `json:"success,omitempty"`
+		} `json:"results,omitempty"`
+		ResultsPending bool `json:"results_pending,omitempty"`
+		RunConfig      struct {
+			Metadata struct {
+				CheckMessage     string `json:"check_message,omitempty"`
+				CheckMessageHTML string `json:"check_message_html,omitempty"`
+				CheckType        string `json:"check_type,omitempty"`
+				Description      string `json:"description,omitempty"`
+				IsSystemCheck    bool   `json:"is_system_check,omitempty"`
+				PriorityLevel    string `json:"priority_level,omitempty"`
+			} `json:"_metadata,omitempty"`
+			Check   string                 `json:"check,omitempty"`
+			CheckID int                    `json:"check_id,omitempty"`
+			Params  map[string]interface{} `json:"params,omitempty"`
+		} `json:"run_config,omitempty"`
+		TriageStatus   *string `json:"triage_status,omitempty"`
+		Status         string  `json:"status,omitempty"`
+	} `json:"check_runs,omitempty"`
 }
 
 type NotificationChannel struct {
