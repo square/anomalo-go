@@ -271,6 +271,24 @@ func (c *Client) DeleteCheck(req DeleteCheckRequest) (*DeleteCheckResponse, erro
 	return data, nil
 }
 
+func (c *Client) RunChecks(req RunChecksRequest) (*RunChecksResponse, error) {
+        var data *RunChecksResponse
+        reqJson, err := json.Marshal(req)
+        if err != nil {
+                return nil, err
+        }
+        resp, err := c.apiCallWithBody("run_checks", http.MethodPost, string(reqJson))
+        if err != nil {
+                return nil, err
+        }
+        body := resp.Body
+        defer closeBody(body)
+        if err := json.NewDecoder(body).Decode(&data); err != nil {
+                return nil, err
+        }
+        return data, nil
+}
+
 func (c *Client) GetNotificationChannels() (*GetNotificationChannelsResponse, error) {
 	var data *GetNotificationChannelsResponse
 	resp, err := c.apiCall("list_notification_channels", http.MethodGet)
