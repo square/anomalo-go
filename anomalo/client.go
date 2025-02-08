@@ -131,9 +131,34 @@ func (c *Client) Ping() (*PingResponse, error) {
 	return data, nil
 }
 
+// GetTableInformation looks up a table by `tableName`.
+// `tableName` must start with its warehouse name.
 func (c *Client) GetTableInformation(tableName string) (*GetTableResponse, error) {
 	var data *GetTableResponse
 	req := fmt.Sprintf("{\"table_name\": \"%s\"}", tableName)
+	resp, err := c.apiCallWithBody("get_table_information", http.MethodGet, req)
+	if err != nil {
+		return nil, err
+	}
+	body := resp.Body
+	defer closeBody(body)
+	if err := json.NewDecoder(body).Decode(&data); err != nil {
+		return nil, err
+	}
+	return data, nil
+}
+
+// GetTableInformationWithWarehouseID takes two arguments
+// - `tableName` is the name of the schema without the warehouse string prefix
+// - `warehouseID` is the integer ID of the corresponding warehouse
+//
+// This method was added because `GetTableInformation` will fail if a table's
+// warehouse name is not unique within an Anomalo workspace. Therefore, if
+// there are multiple warehouses with the same name, then you should differentiate
+// via the warehouseID parameter instead.
+func (c *Client) GetTableInformationWithWarehouseID(tableName string, warehouseID int) (*GetTableResponse, error) {
+	var data *GetTableResponse
+	req := fmt.Sprintf("{\"table_name\": \"%s\", \"warehouse_id\": \"%d\"}", tableName, warehouseID)
 	resp, err := c.apiCallWithBody("get_table_information", http.MethodGet, req)
 	if err != nil {
 		return nil, err
