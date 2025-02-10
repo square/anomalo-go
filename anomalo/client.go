@@ -159,10 +159,10 @@ func (c *Client) GetTableInformation(tableName string) (*GetTableResponse, error
 // warehouse name is not unique within an Anomalo workspace. Therefore, if
 // there are multiple warehouses with the same name, then you should differentiate
 // via the warehouseID parameter instead.
-func (c *Client) GetTableInformationWithWarehouseID(tableName string, warehouseID int) (*GetTableResponse, error) {
+func (c *Client) GetTableInformationWithWarehouseID(req GetTableInformationRequest) (*GetTableResponse, error) {
 	var data *GetTableResponse
-	req := fmt.Sprintf("{\"table_name\": \"%s\", \"warehouse_id\": \"%d\"}", tableName, warehouseID)
-	resp, err := c.apiCallWithBody("get_table_information", http.MethodGet, req)
+	reqJson, err := json.Marshal(req)
+	resp, err := c.apiCallWithBody("get_table_information", http.MethodGet, string(reqJson))
 	if err != nil {
 		return nil, err
 	}
