@@ -151,15 +151,13 @@ func (c *Client) GetTableInformation(tableName string) (*GetTableResponse, error
 	return data, nil
 }
 
-// GetTableInformationWithWarehouseID takes two arguments
-// - `tableName` is the name of the schema without the warehouse string prefix
-// - `warehouseID` is the integer ID of the corresponding warehouse
+// GetTableInformationFromRequest supports looking up a table via query params
 //
 // This method was added because `GetTableInformation` will fail if a table's
 // warehouse name is not unique within an Anomalo workspace. Therefore, if
 // there are multiple warehouses with the same name, then you should differentiate
 // via the warehouseID parameter instead.
-func (c *Client) GetTableInformationWithWarehouseID(req GetTableInformationRequest) (*GetTableResponse, error) {
+func (c *Client) GetTableInformationFromRequest(req GetTableInformationRequest) (*GetTableResponse, error) {
 	var data *GetTableResponse
 	reqJson, err := json.Marshal(req)
 	resp, err := c.apiCallWithBody("get_table_information", http.MethodGet, string(reqJson))

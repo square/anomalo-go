@@ -17,6 +17,7 @@ type Label struct {
 type GetTableInformationRequest struct {
 	WarehouseID int    `json:"warehouse_id,omitempty"`
 	TableName   string `json:"table_name,omitempty"`
+	TableID     int    `json:"table_id,omitempty"`
 }
 
 type GetTableResponse struct {
