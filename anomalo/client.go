@@ -133,6 +133,9 @@ func (c *Client) Ping() (*PingResponse, error) {
 
 // GetTableInformation looks up a table by `tableName`.
 // `tableName` must start with its warehouse name.
+//
+// For example, a Snowflake table with a warehouse called `square` and a table
+// called `items.variations` should be referenced as `square.items.variations`.
 func (c *Client) GetTableInformation(tableName string) (*GetTableResponse, error) {
 	var data *GetTableResponse
 	req := fmt.Sprintf("{\"table_name\": \"%s\"}", tableName)
