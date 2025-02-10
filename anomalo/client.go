@@ -131,10 +131,36 @@ func (c *Client) Ping() (*PingResponse, error) {
 	return data, nil
 }
 
+// GetTableInformation looks up a table by `tableName`.
+// `tableName` must start with its warehouse name.
+//
+// For example, a Snowflake table with a warehouse called `square` and a table
+// called `items.variations` should be referenced as `square.items.variations`.
 func (c *Client) GetTableInformation(tableName string) (*GetTableResponse, error) {
 	var data *GetTableResponse
 	req := fmt.Sprintf("{\"table_name\": \"%s\"}", tableName)
 	resp, err := c.apiCallWithBody("get_table_information", http.MethodGet, req)
+	if err != nil {
+		return nil, err
+	}
+	body := resp.Body
+	defer closeBody(body)
+	if err := json.NewDecoder(body).Decode(&data); err != nil {
+		return nil, err
+	}
+	return data, nil
+}
+
+// GetTableInformationFromRequest supports looking up a table via query params
+//
+// This method was added because `GetTableInformation` will fail if a table's
+// warehouse name is not unique within an Anomalo workspace. Therefore, if
+// there are multiple warehouses with the same name, then you should differentiate
+// via the warehouseID parameter instead.
+func (c *Client) GetTableInformationFromRequest(req GetTableInformationRequest) (*GetTableResponse, error) {
+	var data *GetTableResponse
+	reqJson, err := json.Marshal(req)
+	resp, err := c.apiCallWithBody("get_table_information", http.MethodGet, string(reqJson))
 	if err != nil {
 		return nil, err
 	}
