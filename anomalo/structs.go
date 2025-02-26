@@ -244,3 +244,12 @@ type GetOrganizationsResponse struct {
 type ChangeOrganizationResponse struct {
 	ID int `json:"id,omitempty"`
 }
+
+type DiscoverNewWarehouseTablesResponse struct {
+    ID                        int       `json:"id,omitempty"`
+    Name                      string    `json:"name,omitempty"`
+    LastRefreshed             time.Time `json:"last_refreshed,omitempty"`
+    LastRefreshStarted        time.Time `json:"last_refresh_started,omitempty"`
+    LastPartialRefreshed      time.Time `json:"last_partial_refreshed,omitempty"`
+    LastPartialRefreshStarted time.Time `json:"last_partial_refresh_started,omitempty"`
+}
