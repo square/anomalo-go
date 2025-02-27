@@ -107,6 +107,10 @@ func (c *Client) apiCallWithBody(endpoint string, method string, jsonParams stri
 	}
 
 	if resp.StatusCode != 200 {
+		// Parse header for retry time
+		if retryAfter, ok := resp.Header["Retry-After"]; resp.StatusCode == 429 && ok {
+			return nil, fmt.Errorf("Too many requests, retry after: %s seconds", retryAfter)
+		}
 		bodyBytes, err := io.ReadAll(resp.Body)
 		if err != nil {
 			return nil, fmt.Errorf("response code %d. unable to read response body. got %w", resp.StatusCode, err)
@@ -413,6 +417,20 @@ func (c *Client) ChangeOrganization(orgId int64) (*ChangeOrganizationResponse, e
 	var data *ChangeOrganizationResponse
 	req := fmt.Sprintf("{\"id\": \"%d\"}", orgId)
 	resp, err := c.apiCallWithBody("organization", http.MethodPut, req)
+	if err != nil {
+		return nil, err
+	}
+	body := resp.Body
+	defer closeBody(body)
+	if err := json.NewDecoder(body).Decode(&data); err != nil {
+		return nil, err
+	}
+	return data, nil
+}
+
+func (c *Client) DiscoverNewWarehouseTables(warehouseId int64) (*DiscoverNewWarehouseTablesResponse, error) {
+	var data *DiscoverNewWarehouseTablesResponse
+	resp, err := c.apiCall(fmt.Sprintf("warehouse/%d/refresh/new", warehouseId), http.MethodPost)
 	if err != nil {
 		return nil, err
 	}
