@@ -56,6 +56,7 @@ type GetTableResponse struct {
 		CheckCadenceRunAtDuration string    `json:"check_cadence_run_at_duration,omitempty"`
 		IntervalSkipExpr          string    `json:"interval_skip_expr,omitempty"`
 		AlwaysAlertOnErrors       bool      `json:"always_alert_on_errors,omitempty"`
+		DisabledQualityCheckIds   []int     `json:"disabled_quality_check_ids,omitempty"`
 		Created                   time.Time `json:"created,omitempty"`
 		CreatedBy                 struct {
 			ID   int    `json:"id,omitempty"`
@@ -81,6 +82,7 @@ type ConfigureTableRequest struct {
 	CheckCadenceRunAtDuration string   `json:"check_cadence_run_at_duration,omitempty"`
 	IntervalSkipExpr          string   `json:"interval_skip_expr,omitempty"`
 	AlwaysAlertOnErrors       bool     `json:"always_alert_on_errors,omitempty"`
+	DisabledQualityCheckIds   []int    `json:"disabled_quality_check_ids,omitempty"`
 }
 
 type ConfigureTableResponse struct {
