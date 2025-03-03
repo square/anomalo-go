@@ -442,6 +442,20 @@ func (c *Client) DiscoverNewWarehouseTables(warehouseId int64) (*DiscoverNewWare
 	return data, nil
 }
 
+func (c *Client) ListWarehouses() (*ListWarehousesResponse, error) {
+	var data *ListWarehousesResponse
+	resp, err := c.apiCall("list_warehouses", http.MethodGet)
+	if err != nil {
+		return nil, err
+	}
+	body := resp.Body
+	defer closeBody(body)
+	if err := json.NewDecoder(body).Decode(&data); err != nil {
+		return nil, err
+	}
+	return data, nil
+}
+
 // For debugging
 func responseToString(resp *http.Response) string {
 	bodyBytes, err := io.ReadAll(resp.Body)

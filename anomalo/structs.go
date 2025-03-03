@@ -255,3 +255,14 @@ type DiscoverNewWarehouseTablesResponse struct {
     LastPartialRefreshed      time.Time `json:"last_partial_refreshed,omitempty"`
     LastPartialRefreshStarted time.Time `json:"last_partial_refresh_started,omitempty"`
 }
+
+type ListWarehousesResponse struct {
+	Warehouses []struct {
+		ID                       int      `json:"id,omitempty"`
+		Name                     string   `json:"name,omitempty"`
+		WarehouseType            string   `json:"warehouse_type,omitempty"`
+		IsActive                 bool     `json:"is_active,omitempty"`
+		SchemaCrawlExclusionList []string `json:"schema_crawl_exclusion_list,omitempty"`
+		SchemaCrawlInclusionList []string `json:"schema_crawl_inclusion_list,omitempty"`
+	} `json:"warehouses,omitempty"`
+}
